@@ -1,0 +1,36 @@
+{
+    "num_logins": 2,
+    "recent_logins": [
+        {
+            "msg_data": "User player_123 with client id 'web-v2' logged in. ",
+            "received_timestamp": "2025-09-09 11:20:00.000220"
+        },
+        {
+            "msg_data": "Device d290f1ee-6c54-4b01-90e6-d701748f0851 reported alert 'Motion Detected' with severity level '8' (Code: 323)",
+            "received_timestamp": "2025-04-06 01:19:16.051872"
+        }
+    ],
+    "num_scores": 1939,
+    "recent_scores": [
+        {
+            "msg_data": "User player_123 with client id 'web-v2' scored 18450 in level stage-5. ",
+            "received_timestamp": "2025-09-09 12:06:23.570893"
+        },
+        {
+            "msg_data": "User player_123 with client id 'web-v2' scored 18450 in level stage-5. ",
+            "received_timestamp": "2025-09-09 12:06:23.567390"
+        },
+        {
+            "msg_data": "User player_123 with client id 'web-v2' scored 18450 in level stage-5. ",
+            "received_timestamp": "2025-09-09 12:06:23.563699"
+        },
+        {
+            "msg_data": "User player_123 with client id 'web-v2' scored 18450 in level stage-5. ",
+            "received_timestamp": "2025-09-09 12:06:23.559571"
+        },
+        {
+            "msg_data": "User player_123 with client id 'web-v2' scored 18450 in level stage-5. ",
+            "received_timestamp": "2025-09-09 12:06:23.554279"
+        }
+    ]
+}
