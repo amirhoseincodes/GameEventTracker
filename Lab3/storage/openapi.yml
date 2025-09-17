@@ -29,10 +29,10 @@ paths:
             schema:
               $ref: "#/components/schemas/LoginEvent"
             example:
-              eventId: "9f2e1db1-b4f6-4e6e-7c2b-3f0a7c4c1010"
+              event_id: "9f2e1db1-b4f6-4e6e-7c2b-3f0a7c4c1010"
               timestamp: "2025-08-28T15:30:00Z"
-              clientId: "ios-v1"
-              userId: "player_987"
+              client_id: "ios-v1"
+              user_id: "player_987"
               platform: "ios"
               locale: "fa-IR"
               ip: "198.51.100.23"
@@ -57,13 +57,13 @@ paths:
             schema:
               $ref: "#/components/schemas/ScoreEvent"
             example:
-              eventId: "b7c4c101-3f0a-4e6e-9f2e-1db1b4f67c2b"
+              event_id: "b7c4c101-3f0a-4e6e-9f2e-1db1b4f67c2b"
               timestamp: "2025-08-28T15:35:05Z"
-              clientId: "web-v2"
-              userId: "player_123"
-              levelId: "stage-5"
+              client_id: "web-v2"
+              user_id: "player_123"
+              level_id: 43
               score: 18450
-              durationMs: 74210
+              duration_ms: 74210
       responses:
         "202":
           description: Accepted
@@ -80,14 +80,14 @@ components:
         status:
           type: string
           enum: [accepted]
-        eventId:
+        event_id:
           type: string
       required: [status]
 
     EventEnvelope:
       type: object
       properties:
-        eventId:
+        event_id:
           type: string
           format: uuid
         type:
@@ -96,9 +96,9 @@ components:
         timestamp:
           type: string
           format: date-time
-        clientId:
+        client_id:
           type: string
-        userId:
+        user_id:
           type: string
         payload:
           oneOf:
@@ -110,17 +110,17 @@ components:
       allOf:
         - type: object
           properties:
-            eventId:
+            event_id:
               type: string
               format: uuid
             timestamp:
               type: string
               format: date-time
-            clientId:
+            client_id:
               type: string
-            userId:
+            user_id:
               type: string
-          required: [timestamp, clientId, userId]
+          required: [timestamp, client_id, user_id]
         - $ref: "#/components/schemas/LoginEventPayload"
 
     LoginEventPayload:
@@ -140,28 +140,28 @@ components:
       allOf:
         - type: object
           properties:
-            eventId:
+            event_id:
               type: string
               format: uuid
             timestamp:
               type: string
               format: date-time
-            clientId:
+            client_id:
               type: string
             userId:
               type: string
-          required: [timestamp, clientId, userId]
+          required: [timestamp, client_id, user_id]
         - $ref: "#/components/schemas/ScoreEventPayload"
 
     ScoreEventPayload:
       type: object
       properties:
-        levelId:
-          type: string
+        level_id:
+          type: integer
         score:
           type: integer
           minimum: 0
-        durationMs:
+        duration_ms:
           type: integer
           minimum: 0
-      required: [levelId, score]
+      required: [level_id, score]

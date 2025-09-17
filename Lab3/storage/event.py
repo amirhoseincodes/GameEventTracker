@@ -1,5 +1,6 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, DateTime, func
+import uuid
 
 
 class Base(DeclarativeBase):
@@ -9,8 +10,12 @@ class Base(DeclarativeBase):
 
 class LoginReport(Base):
     __tablename__ = "login_report"
-
-    user_id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    id: Mapped[str] = mapped_column(
+        String(50),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4())
+    )
+    user_id: Mapped[str] = mapped_column(String(50), nullable=False)
     client_id: Mapped[str] = mapped_column(String(50), nullable=False)
     event_id: Mapped[str] = mapped_column(String(50), nullable=False)
     platform: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -24,7 +29,13 @@ class LoginReport(Base):
 class ScoreReport(Base):
     __tablename__ = "score_report"
 
-    user_id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    id: Mapped[str] = mapped_column(
+        String(50),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4())
+    )
+
+    user_id: Mapped[str] = mapped_column(String(50), nullable=False)
     client_id: Mapped[str] = mapped_column(String(50), nullable=False)
     event_id: Mapped[str] = mapped_column(String(50), nullable=False)
     level_id: Mapped[int] = mapped_column(Integer, nullable=False)

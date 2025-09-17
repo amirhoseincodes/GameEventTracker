@@ -6,8 +6,7 @@ from event import *
 import connexion
 from datetime import datetime
 
-# متغیر برای کنترل ساخت جداول دیتابیس
-created = False
+
 
 
 # ساخت موتور دیتابیس SQLite
@@ -51,9 +50,9 @@ def add_login_event(session, body):
     """تابع برای افزودن رویداد ورود کاربر به دیتابیس"""
     # ساخت شیء LoginReport با اطلاعات دریافتی
     event = LoginReport(
-        user_id=body["userId"],  # شناسه کاربر
-        client_id=body["clientId"],  # شناسه کلاینت
-        event_id=body.get("eventId", ""),  # شناسه رویداد (اختیاری)
+        user_id=body["user_id"],  # شناسه کاربر
+        client_id=body["client_id"],  # شناسه کلاینت
+        event_id=body.get("event_id", ""),  # شناسه رویداد (اختیاری)
         platform=body.get("platform", ""),  # پلتفرم (اختیاری)
         local=body.get("local", ""),  # منطقه محلی (اختیاری)
         ip=body.get("ip", ""),  # آدرس IP (اختیاری)
@@ -73,12 +72,12 @@ def add_score_event(session, body):
     """تابع برای افزودن رویداد امتیاز کاربر به دیتابیس"""
     # ساخت شیء ScoreReport با اطلاعات دریافتی
     event = ScoreReport(
-        user_id=body["userId"],  # شناسه کاربر
-        client_id=body["clientId"],  # شناسه کلاینت
-        event_id=body.get("eventId", ""),  # شناسه رویداد (اختیاری)
-        level_id=body["levelId"],  # شناسه مرحله بازی
+        user_id=body["user_id"],  # شناسه کاربر
+        client_id=body["client_id"],  # شناسه کلاینت
+        event_id=body.get("event_id", ""),  # شناسه رویداد (اختیاری)
+        level_id=body["level_id"],  # شناسه مرحله بازی
         score=body["score"],  # امتیاز کسب شده
-        duration_ms=body["durationMs"],  # مدت زمان بازی (میلی‌ثانیه)
+        duration_ms=body["duration_ms"],  # مدت زمان بازی (میلی‌ثانیه)
         timestamp=datetime.now(),  # زمان فعلی
     )
 
@@ -90,20 +89,21 @@ def add_score_event(session, body):
     return {"message": "Score event stored in DB", "data": body}
 
 
+
+
 def post_login_event(body):
     """تابع برای دریافت درخواست ثبت رویداد ورود کاربر"""
     # اگر جداول هنوز ساخته نشده‌اند، آن‌ها را بساز
-    if not created:
-        Base.metadata.create_all(engine)
-    # وارد کردن تابع از ماژول اصلی و فراخوانی آن
+
+        # وارد کردن تابع از ماژول اصلی و فراخوانی آن
+
     return add_login_event(body)
 
 
 def post_score_event(body):
     """تابع برای دریافت درخواست ثبت رویداد امتیاز کاربر"""
     # اگر جداول هنوز ساخته نشده‌اند، آن‌ها را بساز
-    if not created:
-        Base.metadata.create_all(engine)
+
     # وارد کردن تابع از ماژول اصلی و فراخوانی آن
     return add_score_event(body)
 
@@ -119,4 +119,7 @@ app.add_api(
 
 # اجرای اپلیکیشن اگر این فایل به صورت مستقیم اجرا شود
 if __name__ == "__main__":
+    drop_table()                  # همه جدول‌ها حذف میشه
+
+    Base.metadata.create_all(engine)
     app.run(port=8090)  # اجرا روی پورت 8090
