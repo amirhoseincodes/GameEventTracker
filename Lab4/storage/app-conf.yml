@@ -1,0 +1,7 @@
+version: 1
+datastore:
+user: firstdevman
+password: mypassword
+hostname: localhost
+port: 3306
+db: mydb

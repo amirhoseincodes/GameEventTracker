@@ -2,23 +2,24 @@ import functools
 from sqlalchemy import create_engine,text
 from sqlalchemy.orm import sessionmaker
 from event import *
-
+import yaml
 import connexion
+import logging.config
 from datetime import datetime
+
+# لود کردن تنظیمات از فایل کانفیگ و لغو کردن هارد کد
+with open('app-conf.yml', 'r') as f:
+    app_config = yaml.safe_load(f.read())
+
+# استفاده از تنظیمات برای گرفتن لاگ ها
+with open("log-conf.yml", "r") as f:
+    LOG_CONFIG = yaml.safe_load(f.read())
+    logging.config.dictConfig(LOG_CONFIG)
+logger = logging.getLogger('basicLogger')
 
 # ساخت موتور دیتابیس SQLite
 
-#engine = create_engine("sqlite:///game_tracker_engine.db") انجین با استفاده از sqlite روش قدیم
-
-engine = create_engine("mysql+pymysql://firstdevman:mypassword@localhost/mydb")
-
-# تست اتصال به کانتینر
-# with engine.connect() as conn:
-#     result = conn.execute(text("SELECT 1"))
-#     print(result.fetchone())
-
-
-
+engine = create_engine(f"mysql+pymysql://{app_config['user']}:{app_config['password']}@{app_config['hostname']}/{app_config['db']}")
 
 
 def make_session():
@@ -105,14 +106,21 @@ def post_login_event(body):
     """تابع برای دریافت درخواست ثبت رویداد ورود کاربر"""
     # اگر جداول هنوز ساخته نشده‌اند، آن‌ها را بساز
 
-        # وارد کردن تابع از ماژول اصلی و فراخوانی آن
+    trace_id = body["trace_id"]
+    store_report = f"Stored event login_report with a trace id of {trace_id}"
+    logger.info(store_report)
 
+    # وارد کردن تابع از ماژول اصلی و فراخوانی آن
     return add_login_event(body)
 
 
 def post_score_event(body):
     """تابع برای دریافت درخواست ثبت رویداد امتیاز کاربر"""
     # اگر جداول هنوز ساخته نشده‌اند، آن‌ها را بساز
+
+    trace_id = body["trace_id"]
+    store_report = f"Stored event score_report with a trace id of {trace_id}"
+    logger.info(store_report)
 
     # وارد کردن تابع از ماژول اصلی و فراخوانی آن
     return add_score_event(body)
