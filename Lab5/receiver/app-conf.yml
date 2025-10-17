@@ -1,0 +1,6 @@
+version: 1
+events:
+  login:
+    url: http://localhost:8090/events/login
+  score:
+    url: http://localhost:8090/events/score

@@ -1,0 +1,169 @@
+
+
+openapi: 3.0.3
+info:
+  title: Game Event Tracking – Ingestion API (Test Mode)
+  version: 1.0.0
+  description: |
+    RESTful API for ingesting gameplay events (login and score) from game clients.
+    Security removed for testing POST with JSON.
+
+servers:
+  - url: http://localhost:8090
+    description: Local development
+
+tags:
+  - name: Events
+    description: Submit and query events
+
+paths:
+
+  /events/login:
+    post:
+      tags: [Events]
+      summary: Ingest a LoginEvent
+      operationId: app.post_login_event
+      security: []   # بدون API Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginEvent"
+            example:
+              event_id: "9f2e1db1-b4f6-4e6e-7c2b-3f0a7c4c1010"
+              timestamp: "2025-08-28T15:30:00Z"
+              client_id: "ios-v1"
+              user_id: "player_987"
+              platform: "ios"
+              locale: "fa-IR"
+              ip: "198.51.100.23"
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ack"
+
+  /events/score:
+    post:
+      tags: [Events]
+      summary: Ingest a ScoreEvent
+      operationId: app.post_score_event
+      security: []   # بدون API Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScoreEvent"
+            example:
+              event_id: "b7c4c101-3f0a-4e6e-9f2e-1db1b4f67c2b"
+              timestamp: "2025-08-28T15:35:05Z"
+              client_id: "web-v2"
+              user_id: "player_123"
+              level_id: 43
+              score: 18450
+              duration_ms: 74210
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ack"
+
+components:
+  schemas:
+    Ack:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [accepted]
+        event_id:
+          type: string
+      required: [status]
+
+    EventEnvelope:
+      type: object
+      properties:
+        event_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [login, score]
+        timestamp:
+          type: string
+          format: date-time
+        client_id:
+          type: string
+        user_id:
+          type: string
+        payload:
+          oneOf:
+            - $ref: "#/components/schemas/LoginEventPayload"
+            - $ref: "#/components/schemas/ScoreEventPayload"
+      required: [type, timestamp, payload]
+
+    LoginEvent:
+      allOf:
+        - type: object
+          properties:
+            event_id:
+              type: string
+              format: uuid
+            timestamp:
+              type: string
+              format: date-time
+            client_id:
+              type: string
+            user_id:
+              type: string
+          required: [timestamp, client_id, user_id]
+        - $ref: "#/components/schemas/LoginEventPayload"
+
+    LoginEventPayload:
+      type: object
+      properties:
+        platform:
+          type: string
+        locale:
+          type: string
+          example: en-US
+        ip:
+          type: string
+          format: ipv4
+      required: [platform]
+
+    ScoreEvent:
+      allOf:
+        - type: object
+          properties:
+            event_id:
+              type: string
+              format: uuid
+            timestamp:
+              type: string
+              format: date-time
+            client_id:
+              type: string
+            userId:
+              type: string
+          required: [timestamp, client_id, user_id]
+        - $ref: "#/components/schemas/ScoreEventPayload"
+
+    ScoreEventPayload:
+      type: object
+      properties:
+        level_id:
+          type: integer
+        score:
+          type: integer
+          minimum: 0
+        duration_ms:
+          type: integer
+          minimum: 0
+      required: [level_id, score]

@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_USER: firstdevman
+      MYSQL_PASSWORD: mypassword
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
