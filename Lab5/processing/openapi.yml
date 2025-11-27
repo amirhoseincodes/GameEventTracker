@@ -1,0 +1,69 @@
+
+
+openapi: 3.0.3
+info:
+  version: "1.0.0"
+  title: Stats API
+  description: This API provides event stats
+
+servers:
+  - url: http://localhost:8100
+    description: Local development
+
+tags:
+  - name: Events
+    description: Submit and query events
+
+paths:
+
+  /stats:
+    get:
+      summary: Gets the event stats
+      operationId: app.get_stats
+      description: Gets Blood Pressure and Heart Rate processsed statistics
+      responses:
+        '200':
+          description: Successfully returned a list of blood pressure events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                   $ref: '#/components/schemas/ReadingStats'
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    ReadingStats:
+      required:
+        - num_gl_readings
+        - max_gl_sys_reading
+        - max_gl_dia_reading
+        - num_gs_readings
+        - max_gs_reading
+      properties:
+        num_gl_readings:
+          type: integer
+          example: 500000
+        max_gl_sys_reading:
+          type: integer
+          example: 200
+        max_gl_dia_reading:
+          type: integer
+          example: 180
+        num_gs_readings:
+          type: integer
+          example: 500000
+        max_gs_reading:
+          type: integer
+          example: 250
+      type: object
