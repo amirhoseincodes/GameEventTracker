@@ -7,7 +7,7 @@ info:
     Security removed for testing POST with JSON.
 
 servers:
-  - url: http://localhost:8090
+  - url: http://localhost:8080
     description: Local development
 
 tags:
